@@ -4,15 +4,24 @@ import NotFound from "@/pages/NotFound";
 import { Route, Switch } from "wouter";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
-import Home from "./pages/Home";
+import { SchoolAuthProvider } from "./contexts/SchoolAuthContext";
+import Welcome from "./pages/Welcome";
+import Menu from "./pages/Menu";
+import Login from "./pages/Login";
+import ParentDashboard from "./pages/ParentDashboard";
+import TeacherDashboard from "./pages/TeacherDashboard";
+import PrincipalDashboard from "./pages/PrincipalDashboard";
 
 function Router() {
-  // make sure to consider if you need authentication for certain routes
   return (
     <Switch>
-      <Route path={"/"} component={Home} />
+      <Route path={"/"} component={Welcome} />
+      <Route path={"/menu"} component={Menu} />
+      <Route path={"/login/:role"} component={Login} />
+      <Route path={"/parent/dashboard"} component={ParentDashboard} />
+      <Route path={"/teacher/dashboard"} component={TeacherDashboard} />
+      <Route path={"/principal/dashboard"} component={PrincipalDashboard} />
       <Route path={"/404"} component={NotFound} />
-      {/* Final fallback route */}
       <Route component={NotFound} />
     </Switch>
   );
@@ -26,14 +35,13 @@ function Router() {
 function App() {
   return (
     <ErrorBoundary>
-      <ThemeProvider
-        defaultTheme="light"
-        // switchable
-      >
-        <TooltipProvider>
-          <Toaster />
-          <Router />
-        </TooltipProvider>
+      <ThemeProvider defaultTheme="light">
+        <SchoolAuthProvider>
+          <TooltipProvider>
+            <Toaster />
+            <Router />
+          </TooltipProvider>
+        </SchoolAuthProvider>
       </ThemeProvider>
     </ErrorBoundary>
   );

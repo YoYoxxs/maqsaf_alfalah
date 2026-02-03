@@ -89,4 +89,69 @@ export async function getUserByOpenId(openId: string) {
   return result.length > 0 ? result[0] : undefined;
 }
 
-// TODO: add feature queries here as your schema grows.
+// Student queries
+export async function getAllStudents() {
+  const db = await getDb();
+  if (!db) return [];
+  const { students } = await import("../drizzle/schema");
+  return await db.select().from(students);
+}
+
+export async function getStudentById(id: number) {
+  const db = await getDb();
+  if (!db) return undefined;
+  const { students } = await import("../drizzle/schema");
+  const { eq } = await import("drizzle-orm");
+  const result = await db.select().from(students).where(eq(students.id, id)).limit(1);
+  return result.length > 0 ? result[0] : undefined;
+}
+
+export async function getStudentByParentName(parentName: string) {
+  const db = await getDb();
+  if (!db) return undefined;
+  const { students } = await import("../drizzle/schema");
+  const { eq } = await import("drizzle-orm");
+  const result = await db.select().from(students).where(eq(students.parentName, parentName)).limit(1);
+  return result.length > 0 ? result[0] : undefined;
+}
+
+export async function updateStudentPoints(studentId: number, newPoints: number) {
+  const db = await getDb();
+  if (!db) return;
+  const { students } = await import("../drizzle/schema");
+  const { eq } = await import("drizzle-orm");
+  await db.update(students).set({ points: newPoints }).where(eq(students.id, studentId));
+}
+
+// Transaction queries
+export async function getTransactionsByStudentId(studentId: number) {
+  const db = await getDb();
+  if (!db) return [];
+  const { transactions } = await import("../drizzle/schema");
+  const { eq, desc } = await import("drizzle-orm");
+  return await db.select().from(transactions).where(eq(transactions.studentId, studentId)).orderBy(desc(transactions.transactionDate));
+}
+
+export async function getAllTransactions() {
+  const db = await getDb();
+  if (!db) return [];
+  const { transactions } = await import("../drizzle/schema");
+  const { desc } = await import("drizzle-orm");
+  return await db.select().from(transactions).orderBy(desc(transactions.transactionDate));
+}
+
+// Points history queries
+export async function addPointsHistory(data: { studentId: number; amount: number; reason: string; actionBy: string; actionByRole: "teacher" | "principal" | "system" }) {
+  const db = await getDb();
+  if (!db) return;
+  const { pointsHistory } = await import("../drizzle/schema");
+  await db.insert(pointsHistory).values(data);
+}
+
+export async function getPointsHistoryByStudentId(studentId: number) {
+  const db = await getDb();
+  if (!db) return [];
+  const { pointsHistory } = await import("../drizzle/schema");
+  const { eq, desc } = await import("drizzle-orm");
+  return await db.select().from(pointsHistory).where(eq(pointsHistory.studentId, studentId)).orderBy(desc(pointsHistory.createdAt));
+}

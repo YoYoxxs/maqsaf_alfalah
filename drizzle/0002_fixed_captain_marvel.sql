@@ -1,0 +1,1 @@
+ALTER TABLE `students` MODIFY COLUMN `school` text NOT NULL;
