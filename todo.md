@@ -63,4 +63,8 @@
 - [x] Test points management operations
 - [x] Test purchase history display
 - [x] Verify RTL layout on all pages
-- [ ] Create checkpoint for deployment
+- [x] Create checkpoint for deployment
+
+## Bug Fixes
+- [x] Fix dynamic require error for zod imports
+- [x] Add back button from login page to main menu

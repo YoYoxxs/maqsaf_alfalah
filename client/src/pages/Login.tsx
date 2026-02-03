@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { trpc } from "@/lib/trpc";
 import { useSchoolAuth } from "@/contexts/SchoolAuthContext";
 import { toast } from "sonner";
-import { Fingerprint } from "lucide-react";
+import { Fingerprint, ArrowRight } from "lucide-react";
 import type { UserRole } from "@shared/types";
 
 export default function Login() {
@@ -143,16 +143,28 @@ export default function Login() {
                 />
               </div>
 
-              <Button
-                type="submit"
-                className="w-full text-lg py-6"
-                style={{
-                  background: "linear-gradient(135deg, #d4af37 0%, #b8941f 100%)",
-                  fontFamily: "'Tajawal', sans-serif",
-                }}
-              >
-                التالي
-              </Button>
+              <div className="space-y-3">
+                <Button
+                  type="submit"
+                  className="w-full text-lg py-6"
+                  style={{
+                    background: "linear-gradient(135deg, #d4af37 0%, #b8941f 100%)",
+                    fontFamily: "'Tajawal', sans-serif",
+                  }}
+                >
+                  التالي
+                </Button>
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="w-full"
+                  onClick={() => setLocation("/menu")}
+                  style={{ fontFamily: "'Tajawal', sans-serif" }}
+                >
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                  رجوع
+                </Button>
+              </div>
             </form>
           ) : (
             <div className="flex flex-col items-center gap-6">

@@ -2,6 +2,7 @@ import { COOKIE_NAME } from "@shared/const";
 import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
 import { publicProcedure, router } from "./_core/trpc";
+import { z } from "zod";
 
 export const appRouter = router({
     // if you need to use socket.io, read and register route in server/_core/index.ts, all api should start with '/api/' so that the gateway can route correctly
@@ -20,13 +21,10 @@ export const appRouter = router({
   // School authentication and data routers
   schoolAuth: router({
     login: publicProcedure
-      .input((raw: unknown) => {
-        const { z } = require("zod");
-        return z.object({
-          username: z.string().min(1),
-          role: z.enum(["parent", "teacher", "principal"]),
-        }).parse(raw);
-      })
+      .input(z.object({
+        username: z.string().min(1),
+        role: z.enum(["parent", "teacher", "principal"]),
+      }))
       .mutation(async ({ input, ctx }) => {
         const { getAllStudents } = await import("./db");
         
@@ -88,26 +86,20 @@ export const appRouter = router({
     }),
     
     getById: publicProcedure
-      .input((raw: unknown) => {
-        const { z } = require("zod");
-        return z.object({ id: z.number() }).parse(raw);
-      })
+      .input(z.object({ id: z.number() }))
       .query(async ({ input }) => {
         const { getStudentById } = await import("./db");
         return await getStudentById(input.id);
       }),
     
     updatePoints: publicProcedure
-      .input((raw: unknown) => {
-        const { z } = require("zod");
-        return z.object({
-          studentId: z.number(),
-          amount: z.number(),
-          reason: z.string(),
-          actionBy: z.string(),
-          actionByRole: z.enum(["teacher", "principal", "system"]),
-        }).parse(raw);
-      })
+      .input(z.object({
+        studentId: z.number(),
+        amount: z.number(),
+        reason: z.string(),
+        actionBy: z.string(),
+        actionByRole: z.enum(["teacher", "principal", "system"]),
+      }))
       .mutation(async ({ input }) => {
         const { getStudentById, updateStudentPoints, addPointsHistory } = await import("./db");
         
@@ -136,10 +128,7 @@ export const appRouter = router({
   
   transactions: router({
     getByStudentId: publicProcedure
-      .input((raw: unknown) => {
-        const { z } = require("zod");
-        return z.object({ studentId: z.number() }).parse(raw);
-      })
+      .input(z.object({ studentId: z.number() }))
       .query(async ({ input }) => {
         const { getTransactionsByStudentId } = await import("./db");
         return await getTransactionsByStudentId(input.studentId);
