@@ -47,8 +47,8 @@ export const appRouter = router({
             },
           };
         } else if (input.role === "teacher") {
-          // Teacher usernames: فاطمة الشرقاوي, محمود عبدالعزيز, نجلاء السيد
-          const validTeachers = ["فاطمة الشرقاوي", "محمود عبدالعزيز", "نجلاء السيد"];
+          // Teacher username: تيماء
+          const validTeachers = ["تيماء"];
           if (!validTeachers.includes(input.username)) {
             throw new Error("اسم المدرس غير صحيح");
           }
@@ -61,8 +61,8 @@ export const appRouter = router({
             },
           };
         } else if (input.role === "principal") {
-          // Principal username: أحمد محمد
-          if (input.username !== "أحمد محمد") {
+          // Principal username: غادة خطايبه
+          if (input.username !== "غادة خطايبه") {
             throw new Error("اسم المدير غير صحيح");
           }
           

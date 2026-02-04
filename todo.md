@@ -68,3 +68,8 @@
 ## Bug Fixes
 - [x] Fix dynamic require error for zod imports
 - [x] Add back button from login page to main menu
+
+## User Updates
+- [x] Change principal name to غادة خطايبه
+- [x] Change teacher to single name تيماء
+- [x] Document how to manually change student names

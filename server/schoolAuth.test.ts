@@ -56,13 +56,13 @@ describe("School Authentication", () => {
 
   it("should authenticate a valid teacher", async () => {
     const result = await caller.schoolAuth.login({
-      username: "فاطمة الشرقاوي",
+      username: "تيماء",
       role: "teacher",
     });
 
     expect(result.success).toBe(true);
     expect(result.user.role).toBe("teacher");
-    expect(result.user.username).toBe("فاطمة الشرقاوي");
+    expect(result.user.username).toBe("تيماء");
   });
 
   it("should reject invalid teacher username", async () => {
@@ -76,13 +76,13 @@ describe("School Authentication", () => {
 
   it("should authenticate the principal", async () => {
     const result = await caller.schoolAuth.login({
-      username: "أحمد محمد",
+      username: "غادة خطايبه",
       role: "principal",
     });
 
     expect(result.success).toBe(true);
     expect(result.user.role).toBe("principal");
-    expect(result.user.username).toBe("أحمد محمد");
+    expect(result.user.username).toBe("غادة خطايبه");
   });
 
   it("should reject invalid principal username", async () => {
@@ -128,7 +128,7 @@ describe("Students API", () => {
         studentId: firstStudent.id,
         amount: 10,
         reason: "اختبار",
-        actionBy: "فاطمة الشرقاوي",
+        actionBy: "تيماء",
         actionByRole: "teacher",
       });
 
@@ -147,7 +147,7 @@ describe("Students API", () => {
           studentId: firstStudent.id,
           amount: -(firstStudent.points + 100),
           reason: "اختبار",
-          actionBy: "أحمد محمد",
+          actionBy: "غادة خطايبه",
           actionByRole: "principal",
         })
       ).rejects.toThrow("النقاط غير كافية");
