@@ -155,3 +155,34 @@ export async function getPointsHistoryByStudentId(studentId: number) {
   const { eq, desc } = await import("drizzle-orm");
   return await db.select().from(pointsHistory).where(eq(pointsHistory.studentId, studentId)).orderBy(desc(pointsHistory.createdAt));
 }
+
+// Student CRUD operations
+export async function createStudent(data: { nameAr: string; nameEn: string; parentName: string; grade: number; section: string; school: string; points: number }) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  const { students } = await import("../drizzle/schema");
+  const result = await db.insert(students).values(data);
+  return result;
+}
+
+export async function updateStudent(id: number, data: { nameAr?: string; nameEn?: string; parentName?: string; grade?: number; section?: string; school?: string; points?: number }) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  const { students } = await import("../drizzle/schema");
+  const { eq } = await import("drizzle-orm");
+  await db.update(students).set(data).where(eq(students.id, id));
+}
+
+export async function deleteStudent(id: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  const { students, transactions, pointsHistory } = await import("../drizzle/schema");
+  const { eq } = await import("drizzle-orm");
+  
+  // Delete related records first
+  await db.delete(transactions).where(eq(transactions.studentId, id));
+  await db.delete(pointsHistory).where(eq(pointsHistory.studentId, id));
+  
+  // Then delete the student
+  await db.delete(students).where(eq(students.id, id));
+}

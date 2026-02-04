@@ -124,6 +124,48 @@ export const appRouter = router({
         
         return { success: true, newPoints };
       }),
+    
+    create: publicProcedure
+      .input(z.object({
+        nameAr: z.string().min(1),
+        nameEn: z.string().min(1),
+        parentName: z.string().min(1),
+        grade: z.number(),
+        section: z.string().min(1),
+        school: z.string().min(1),
+        points: z.number().default(0),
+      }))
+      .mutation(async ({ input }) => {
+        const { createStudent } = await import("./db");
+        await createStudent(input);
+        return { success: true };
+      }),
+    
+    update: publicProcedure
+      .input(z.object({
+        id: z.number(),
+        nameAr: z.string().min(1).optional(),
+        nameEn: z.string().min(1).optional(),
+        parentName: z.string().min(1).optional(),
+        grade: z.number().optional(),
+        section: z.string().min(1).optional(),
+        school: z.string().min(1).optional(),
+        points: z.number().optional(),
+      }))
+      .mutation(async ({ input }) => {
+        const { id, ...data } = input;
+        const { updateStudent } = await import("./db");
+        await updateStudent(id, data);
+        return { success: true };
+      }),
+    
+    delete: publicProcedure
+      .input(z.object({ id: z.number() }))
+      .mutation(async ({ input }) => {
+        const { deleteStudent } = await import("./db");
+        await deleteStudent(input.id);
+        return { success: true };
+      }),
   }),
   
   transactions: router({

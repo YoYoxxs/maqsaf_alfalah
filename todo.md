@@ -73,3 +73,13 @@
 - [x] Change principal name to غادة خطايبه
 - [x] Change teacher to single name تيماء
 - [x] Document how to manually change student names
+
+## Principal Student Management
+- [x] Add backend API for creating new students
+- [x] Add backend API for editing student information
+- [x] Add backend API for deleting students
+- [x] Build student management UI in Principal dashboard
+- [x] Add form for creating new students
+- [x] Add edit dialog for updating student information
+- [x] Add delete confirmation dialog
+- [x] Test all CRUD operations

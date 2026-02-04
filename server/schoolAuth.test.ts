@@ -178,3 +178,55 @@ describe("Transactions API", () => {
     }
   });
 });
+
+
+describe("Student CRUD Operations", () => {
+  const ctx = createContext();
+  const caller = appRouter.createCaller(ctx);
+
+  it("should create a new student", async () => {
+    const result = await caller.students.create({
+      nameAr: "طالب اختبار",
+      nameEn: "Test Student",
+      parentName: "اختبار",
+      grade: 3,
+      section: "ب",
+      school: "مدرسة الفلاح",
+      points: 25,
+    });
+
+    expect(result.success).toBe(true);
+  });
+
+  it("should update student information", async () => {
+    const students = await caller.students.getAll();
+    const firstStudent = students[0];
+
+    if (firstStudent) {
+      const result = await caller.students.update({
+        id: firstStudent.id,
+        nameAr: "اسم محدث",
+        points: 100,
+      });
+
+      expect(result.success).toBe(true);
+
+      const updatedStudent = await caller.students.getById({ id: firstStudent.id });
+      expect(updatedStudent?.nameAr).toBe("اسم محدث");
+      expect(updatedStudent?.points).toBe(100);
+    }
+  });
+
+  it("should delete a student", async () => {
+    const students = await caller.students.getAll();
+    const testStudent = students.find(s => s.parentName === "اختبار");
+
+    if (testStudent) {
+      const result = await caller.students.delete({ id: testStudent.id });
+      expect(result.success).toBe(true);
+
+      const deletedStudent = await caller.students.getById({ id: testStudent.id });
+      expect(deletedStudent).toBeUndefined();
+    }
+  });
+});
